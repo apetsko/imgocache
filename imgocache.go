@@ -1,6 +1,8 @@
 package imgocache
 
-import "sync"
+import (
+	"sync"
+)
 
 // Imgocache struct contains simple map[string]interface{} as db field and sync.Mutex for synchronization
 type Imgocache struct {
