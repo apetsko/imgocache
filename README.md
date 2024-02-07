@@ -30,7 +30,7 @@ func main(){
 	fmt.Println(userID, exist)
 }
 ```
-###output
+#### output
 ```bash
 $ go run .
 42 true
@@ -61,7 +61,7 @@ func main() {
 	fmt.Println(userID, exist)
 }
 ```
-###output
+#### output
 ```bash
 $ go run .
 42 true
