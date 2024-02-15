@@ -19,7 +19,7 @@ import (
 func main(){
 	var icache imgocache.Cacher
 	icache = imgocache.New() // Creating a variable of type interface and assigning it a value of type Imgocache
-	icache.Set("userId", 42)
+	icache.Set("userId", 42, time.Second*5)
 	userID, exist := icache.Get("userId")
 
 	fmt.Println(userID, exist)
@@ -50,7 +50,7 @@ import (
 func main() {
 	var icache imgocache.Cacher
 	icache = imgocache.NewSM() // Creating a variable of type interface and assigning it a value of type Imgocache
-	icache.Set("userId", 42)
+	icache.Set("userId", 42, time.Second*5)
 	userID, exist := icache.Get("userId")
 
 	fmt.Println(userID, exist)

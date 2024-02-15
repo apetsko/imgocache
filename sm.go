@@ -1,30 +1,41 @@
 package imgocache
 
-import "sync"
+import (
+	"sync"
+	"time"
+)
 
-// SM type is the same sync.Map type, which is safe to conrurrent read-write operations
+// SM type is the same as sync.Map type, which is safe for concurrent read-write operations
 type SM struct {
 	sync.Map
 }
 
-// NewSM creates new SM
+// NewSM creates a new instance of SM
 func NewSM() *SM {
 	return &SM{}
 }
 
-// Set method sets the value v for the key k in the cache
-func (s *SM) Set(k string, v interface{}) {
-	s.Store(k, v)
+// Set sets the value v for the key k in the cache with TTL consideration
+func (s *SM) Set(k string, v interface{}, ttl time.Duration) {
+	s.Store(k, item{
+		value:      v,
+		expiration: time.Now().Add(ttl),
+	})
 }
 
-// Get method retrieves the value v for the key k from the cache
+// Get retrieves the value v for the key k from the cache
 // It returns v and a boolean indicating whether the value exists or not
 func (s *SM) Get(k string) (v interface{}, exist bool) {
-	v, exist = s.Load(k)
-	return
+	if val, ok := s.Load(k); ok && (val != nil) {
+		item := val.(item)
+		if time.Now().Before(item.expiration) {
+			return item.value, true
+		}
+	}
+	return nil, false
 }
 
-// Delete method deletes the value from the cache for the given key
+// Delete deletes the value from the cache for the given key
 func (s *SM) Delete(k string) {
 	s.Store(k, nil)
 }
